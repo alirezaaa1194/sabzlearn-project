@@ -1,0 +1,10 @@
+{
+    "disks":[
+        {
+            "name": "sabzlearn-project-disk",
+            "mountTo" : "public/courses/covers"
+        }
+    ],
+    "app":"https://sabzlearn-project-backend.liara.run/",
+    "port":"3000"
+}
