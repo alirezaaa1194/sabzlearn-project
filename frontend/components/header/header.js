@@ -939,9 +939,9 @@ class Header extends HTMLElement {
         "afterbegin",
         `
     <li>
-    <a href="./course_category.html?cat=${
-      menu.href.split("/")[menu.href.split("/").length - 1]
-    }&catName=${menu.title}" class="NavItem">${menu.title} ${
+    <a href="./course_category.html?cat=${menu.href}&catName=${
+          menu.title
+        }" class="NavItem">${menu.title} ${
           menu.submenus.length > 0 ? ' <i class="fa fa-angle-down"></i>' : ""
         }</a>
   </li>
@@ -960,9 +960,13 @@ class Header extends HTMLElement {
         subMenusBox.innerHTML = "";
         menu.submenus.forEach((submenu) => {
           subMenusBox.insertAdjacentHTML(
-            "afterbegin",
+            "beforeend",
             `
-        <li><a href="course.html?name=${submenu.href}">${submenu.title}</a></li>
+        <li><a ${
+          menu.title != "مقالات"
+            ? `href="course.html?name=${submenu.href}"`
+            : `href="blog.html?bName=${submenu.href}"`
+        }>${submenu.title}</a></li>
         `
           );
         });
@@ -977,7 +981,17 @@ class Header extends HTMLElement {
         "afterbegin",
         `
   <li class="menuItem">
-      <a  class="menuLink">
+      <a ${
+        !menu.submenus.length && menu.title != "مقالات"
+          ? `href="./course_category.html?cat=${menu.href}&catName=${menu.title}"`
+          : ""
+      }   
+      
+      ${
+        !menu.submenus.length && menu.title === "مقالات"
+          ? `href="blog_category.html"`
+          : ""
+      }  class="menuLink">
       ${menu.title} ${
           menu.submenus.length > 0 ? '<i class="fa fa-angle-down"></i>' : ""
         }
@@ -996,15 +1010,17 @@ class Header extends HTMLElement {
         menu.submenus.forEach((submenu) => {
           //console.log(submenu);
           menuItem.querySelector(".responsiveSubmenu").insertAdjacentHTML(
-            "beforeend",
+            "afterbegin",
             `
 
   <li class="responsiveMenuItem">
-  <a href="course.html?name=${
-    submenu.href.split("/")[2]
-  }" class="responsiveMenuLink ${this.checkMenuItem(
-              submenu.href.split("/")[2]
-            )}">${submenu.title}</a>
+  <a ${
+    menu.title != "مقالات"
+      ? `href="course.html?name=${submenu.href}"`
+      : `href="blog.html?bName=${submenu.href}"`
+  }  class="responsiveMenuLink">${
+              submenu.title
+            }</a>
 </li>
 
   `
@@ -1032,16 +1048,7 @@ class Header extends HTMLElement {
   }
 
   searchBoxHandler(input) {
-    location.href = `http://127.0.0.1:5500/frontend/courses.html?s=${input.value}`;
-  }
-  checkMenuItem(href) {
-    if (href && location.search.includes(href)) {
-      console.log("ok => ");
-      return "show";
-    }
-    else{
-      return 'no'
-    }
+    location.href = `https://alirezaaa1194.github.io/sabzlearn2/courses.html?s=${input.value}`;
   }
 }
 

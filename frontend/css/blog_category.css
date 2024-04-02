@@ -337,7 +337,6 @@ aside {
   display: block;
 }
 
-
 .see_more_btn_box {
   display: flex;
   flex-direction: column;
@@ -373,6 +372,11 @@ aside {
   border-top-color: var(--SecondTextLightColor);
   animation: loaderRotate 1s infinite linear;
 }
+
+.course_loader {
+  display: none;
+  color: var(--TextLightColor);
+}
 @keyframes loaderRotate {
   100% {
     transform: rotate(360deg);
@@ -388,7 +392,7 @@ aside {
     padding: 10px 0 30px 0;
   }
   .category_title h1 {
-    font-size: 2.7rem;
+    font-size: 2.4rem;
   }
   .filter_blogs_container {
     width: 100%;

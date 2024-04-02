@@ -13,7 +13,7 @@ let send_btn = document.querySelector(".send_btn");
 let departmentID = null;
 let departmentSubID = "63b688c5516a30a651e98156";
 
-fetch("http://localhost:4000/v1/tickets/departments")
+fetch("https://sabzlearn-project-backend.liara.run/v1/tickets/departments")
   .then((data) => data.json())
   .then((departments) => {
     departments.forEach((department) => {

@@ -22,12 +22,13 @@ export const logOut = (userToken) => {
 
 export const redirectToLoginPage = () => {
   if (!isUserLogedIn()) {
-    location.href = "http://127.0.0.1:5500/frontend/loginBy_email.html";
+    location.href =
+      "https://alirezaaa1194.github.io/sabzlearn2/loginBy_email.html";
   }
 };
 export const redirectToPannel = () => {
   if (isUserLogedIn()) {
-    location.href = "http://127.0.0.1:5500/frontend/my-account/";
+    location.href = "https://alirezaaa1194.github.io/sabzlearn2/my-account/";
   }
 };
 
@@ -39,7 +40,7 @@ export const checkEmailPattern = (email) => {
   let regEx = new RegExp(/^(\w+)(@+)(\w{1,})(\.\w+)$/, "g");
   return regEx.test(email);
 };
-export let mainRoute = `http://localhost:4000/v1/`;
+export let mainRoute = `https://sabzlearn-project-backend.liara.run/v1/`;
 
 export const getUserInfo = async () => {
   if (isUserLogedIn()) {
@@ -118,7 +119,7 @@ export const getAllCategories = async () => {
 };
 
 export const getFilteredCourses = async (filterName) => {
-  console.log(filterName);
+  //console.log(filterName);
   switch (filterName) {
     case "free-courses":
       return getAllCourses().then((data) => {
@@ -140,7 +141,7 @@ export const getFilteredCourses = async (filterName) => {
 
     case "all_course":
       return getAllCourses().then((data) => {
-        console.log(data);
+        //console.log(data);
         return data;
       });
       break;
@@ -200,10 +201,10 @@ export function getBlogByFilter(id) {
         return data.slice(0, data.length);
         break;
       case "latest_blogs":
-        return data.slice(0, 5);
+        return data;
         break;
       case "oldest_blogs":
-        return data.slice(data.length - 5, data.length);
+        return data.reverse();
         break;
       case "most_comment_blogs":
         return data;
@@ -215,20 +216,21 @@ export function getBlogByFilter(id) {
 export function myCourseGenerator(courses, container) {
   container.innerHTML = "";
   courses.forEach((course) => {
-    container.insertAdjacentHTML(
-      "beforeend",
-      `
+    if (course) {
+      container.insertAdjacentHTML(
+        "beforeend",
+        `
       <div class="course_box">
       <div class="course_box_header">
         <a href="../course.html?name=${course.shortName}">
           <img
-            src="http://localhost:4000/courses/covers/${course.cover}"
+            src="https://sabzlearn-project-backend.liara.run/courses/covers/${course.cover}"
             alt=""
           />
         </a>
       </div>
       <div class="course_box_body">
-        <a href="../course.js?name=${course.shortName}">${course.name}</a>
+        <a href="../course.html?name=${course.shortName}">${course.name}</a>
       </div>
       <div class="course_box_footer">
         <div class="course_seen_time_label">
@@ -241,13 +243,26 @@ export function myCourseGenerator(courses, container) {
       </div>
     </div>
     `
-    );
+      );
+    }
   });
 }
 
 export const isUserRegisteredToThisCourse = (courseId) => {
-  return getUserInfo().then((res) => {
-    let ishave = res.courses.some((course) => course._id === courseId);
-    return ishave
-  });
+  if (isUserLogedIn()) {
+    return getUserInfo().then((res) => {
+      if (res.courses.length) {
+        let isHave = res.courses.some((course) => {
+          if (course) {
+            return course._id === courseId;
+          }
+        });
+        return isHave;
+      } else {
+        return false;
+      }
+    });
+  } else {
+    return false;
+  }
 };

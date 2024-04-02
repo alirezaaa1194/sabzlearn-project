@@ -25,7 +25,7 @@ const documentBox = document.querySelector(".document-Box");
 
 window.addEventListener("load", () => {
   getAllCourses().then((data) => {
-    console.log(data);
+    //console.log(data);
     courseGenerator(new_products_container, data, 12, true);
   });
   getPopularCourses().then((data) =>
@@ -86,17 +86,19 @@ function courseSliderGenerator(container, courses, count, description) {
   // new_products_container.
   container.innerHTML = "";
   courses.slice(0, count).forEach((course) => {
-    // console.log(course);
+    // //console.log(course);
     container.insertAdjacentHTML(
       "beforeend",
       `
       
       <div class="swiper-slide Product-Card">
       <div class="Card-header">
-        <a href="http://127.0.0.1:5500/frontend/course.html?name=${
+        <a href="https://alirezaaa1194.github.io/sabzlearn2/course.html?name=${
           course.shortName
         }">
-        <img src="http://localhost:4000/courses/covers/${course.cover}" alt="">
+        <img src="https://sabzlearn-project-backend.liara.run/courses/covers/${
+          course.cover
+        }" alt="">
         </a>
         ${
           course.discount
@@ -109,12 +111,12 @@ function courseSliderGenerator(container, courses, count, description) {
         <div class="Category-Box">
           <a href="course_category.html?cat=${
             course.categoryID.name
-          }&catName=${course.categoryID.title.substring(12)}">${
+          }&catName=${course.categoryID.title}">${
         course.categoryID.title
       }</a>
         </div>
         <h4 class="course-Name">
-          <a href="http://127.0.0.1:5500/frontend/course.html?name=${
+          <a href="https://alirezaaa1194.github.io/sabzlearn2/course.html?name=${
             course.shortName
           }">${course.name}</a>
         </h4>
@@ -183,9 +185,9 @@ function articlesGenerator(articles, container) {
       <div class="document-Box">
       <div class="document-Card">
         <div class="document-Card-header">
-          <a href="http://127.0.0.1:5500/frontend/blog.html?bName=${article.shortName}" class="">
+          <a href="https://alirezaaa1194.github.io/sabzlearn2/blog.html?bName=${article.shortName}" class="">
             <img
-              src="http://localhost:4000/courses/covers/${article.cover}"
+              src="https://sabzlearn-project-backend.liara.run/courses/covers/${article.cover}"
               alt=""
               class="document-img"
             />
@@ -194,7 +196,7 @@ function articlesGenerator(articles, container) {
 
         <div class="document-Card-Body">
           <h4 class="document-Name">
-            <a href="http://127.0.0.1:5500/frontend/blog.html?bName=${article.shortName}">${article.title}</a>
+            <a href="https://alirezaaa1194.github.io/sabzlearn2/blog.html?bName=${article.shortName}">${article.title}</a>
           </h4>
           <p class="document-desc">${article.description}</p>
 
@@ -210,7 +212,7 @@ function articlesGenerator(articles, container) {
           </div>
         </div>
         <div class="document-Card-footer">
-          <a href="http://127.0.0.1:5500/frontend/blog.html?bName=${article.shortName}">
+          <a href="https://alirezaaa1194.github.io/sabzlearn2/blog.html?bName=${article.shortName}">
             مطالعه مقاله
             <i class="fa fa-arrow-left"></i>
           </a>

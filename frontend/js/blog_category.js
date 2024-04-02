@@ -11,24 +11,27 @@ let see_more_btn_box = document.querySelector(".see_more_btn_box");
 let see_more_course = document.querySelector(".see_more_course_btn");
 let more_course_text = document.querySelector(".more_course_text");
 let more_course_loader = document.querySelector(".more_course_loader");
+let course_loader = document.querySelector(".course_loader");
 
 let articles_category_list = document.querySelector(".articles_category_list");
 
 let articlesArray = [];
 
-let count = 3;
+let count = 9;
 let start = 0;
 let end = count;
 
 sortBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
+    course_loader.style.display='block'
     sortBtns.forEach((btn) => {
       btn.classList.remove("active");
     });
     btn.classList.add("active");
     getBlogByFilter(btn.id).then((data) => {
       documentBox.innerHTML = "";
-      count = 3;
+      course_loader.style.display='none'
+      count = 9;
       start = 0;
       end = count;
       articlesArray = data;
@@ -47,6 +50,7 @@ sortBtns.forEach((btn) => {
 });
 ResponsivesortBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
+    course_loader.style.display='block'
     ResponsivesortBtns.forEach((btn) => {
       btn.classList.remove("active");
     });
@@ -55,7 +59,8 @@ ResponsivesortBtns.forEach((btn) => {
 
     getBlogByFilter(btn.id).then((data) => {
       documentBox.innerHTML = "";
-      count = 3;
+      course_loader.style.display='none'
+      count = 9;
       start = 0;
       end = count;
       articlesArray = data;
@@ -154,17 +159,17 @@ see_more_course.addEventListener("click", () => {
     }
   }, 1500);
 
-  console.log(start, end);
+  //console.log(start, end);
 });
 
 function articlesGenerator(container) {
   let articles = articlesArray;
-  console.log("before", articles);
+  //console.log("before", articles);
   if (articles.length > count) {
     showen_all_label.style.display = "none";
     see_more_course.style.display = "block";
     for (let i = start; i < end; i++) {
-      // console.log(articles[i]);
+      // //console.log(articles[i]);
       container.insertAdjacentHTML(
         "beforeend",
         `
@@ -173,7 +178,7 @@ function articlesGenerator(container) {
           <div class="document-Card-header">
             <a href="blog.html?bName=${articles[i].shortName}" class="">
               <img
-                src="http://localhost:4000/courses/covers/${articles[i].cover}"
+                src="https://sabzlearn-project-backend.liara.run/courses/covers/${articles[i].cover}"
                 alt=""
                 class="document-img"
               />
@@ -217,7 +222,7 @@ function articlesGenerator(container) {
       see_more_course.style.display = "none";
     }
     for (let i = start; i < articlesArray.length; i++) {
-      console.log(articles[i]);
+      //console.log(articles[i]);
       container.insertAdjacentHTML(
         "beforeend",
         `
@@ -226,7 +231,7 @@ function articlesGenerator(container) {
           <div class="document-Card-header">
             <a href="blog.html?bName=${articles[i].shortName}" class="">
               <img
-                src="http://localhost:4000/articles/covers/${articles[i].cover}"
+                src="https://sabzlearn-project-backend.liara.run/courses/covers/${articles[i].cover}"
                 alt=""
                 class="document-img"
               />
@@ -262,7 +267,7 @@ function articlesGenerator(container) {
       );
     }
   }
-  console.log("after", articles);
+  //console.log("after", articles);
 }
 
 function asideCategoryGenerator(arts) {

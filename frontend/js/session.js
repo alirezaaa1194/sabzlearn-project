@@ -5,6 +5,8 @@ import {
   mainRoute,
   getUserInfo,
   isUserRegisteredToThisCourse,
+  isUserLogedIn,
+  getAllCourses,
 } from "./funcs/utils.js";
 import {
   messageBox,
@@ -18,6 +20,7 @@ ClassicEditor.create(document.querySelector("#editor"), {
   alignment: {
     options: ["left", "right", "justify", "center"],
   },
+  placeholder: "پرسش خودرا بپرسید...",
   toolbar: ["bold", "link", "alignment", "undo", "redo"],
   language: "fa",
 }).then((newEditor) => {
@@ -73,12 +76,13 @@ getCourseByName("cName").then((data) => {
 });
 
 function sessionContentGenerator(course) {
+  document.querySelector(".teacher_job").innerHTML = course.creator.role;
   // start breadcrumb
   breadcrumb_category_name.innerHTML = course.categoryID.title;
-  breadcrumb_category_name.href = `http://127.0.0.1:5500/frontend/course_category.html?cat=${course.categoryID.name}&catName=${course.categoryID.title}`;
+  breadcrumb_category_name.href = `https://alirezaaa1194.github.io/sabzlearn2/course_category.html?cat=${course.categoryID.name}&catName=${course.categoryID.title}`;
 
   breadcrumb_course_name.innerHTML = course.name;
-  breadcrumb_course_name.href = `http://127.0.0.1:5500/frontend/course.html?name=${course.shortName}`;
+  breadcrumb_course_name.href = `https://alirezaaa1194.github.io/sabzlearn2/course.html?name=${course.shortName}`;
   // finish breadcrumb
   course_name_label.innerHTML = course.name;
   accordion_item_body.innerHTML = "";
@@ -106,9 +110,9 @@ function sessionContentGenerator(course) {
         >
       </a>
     </div>
-    <span class="course_time_label">${session.time.includes(":")
-    ? session.time
-    : session.time + ":00"}</span>
+    <span class="course_time_label">${
+      session.time.includes(":") ? session.time : session.time + ":00"
+    }</span>
   </div>
 
     `
@@ -117,7 +121,7 @@ function sessionContentGenerator(course) {
     accordion_item_body.style.height = accordion_item_body.scrollHeight + "px";
 
     document.querySelectorAll(".accordion_body_list_item").forEach((item) => {
-      console.log(item);
+      // console.log(item);
       if (item.dataset.target == getQueryParams("episode")) {
         item.classList.add("active");
         document.querySelector(".accordion_main").scrollTo(0, item.offsetTop);
@@ -166,12 +170,12 @@ function sessionContentGenerator(course) {
   creator_rol_label.innerHTML = course.creator.role;
 
   fetch(
-    `http://localhost:4000/v1/courses/${course.shortName}/${getQueryParams(
-      "episode"
-    )}`,
+    `https://sabzlearn-project-backend.liara.run/v1/courses/${
+      course.shortName
+    }/${getQueryParams("episode")}`,
     {
       headers: {
-        Authorization: `Bearer ${getUserTokenFromcookie()}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU2YjBlMWQ1MTQyYjkxYWZhOWJiMyIsImlhdCI6MTcxMTgzNjEyNCwiZXhwIjoxNzE0NDI4MTI0fQ.XLOtjcvVijn-8XGFHpgGSHugT8-Ci06YkOlGur3e0g0`,
       },
     }
   )
@@ -183,9 +187,14 @@ function sessionContentGenerator(course) {
       }
     })
     .then((data) => {
-      console.log(data);
-      video_player.src = `http://localhost:4000/courses/covers/${data.session.video}`;
-      video_player.poster = `http://localhost:4000/courses/covers/${course.cover}`;
+      // console.log(data);
+
+      // console.log(data.session);
+
+      redirectUserToCoursePage(data.session);
+
+      video_player.src = `https://sabzlearn-project-backend.liara.run/courses/covers/${data.session.video}`;
+      video_player.poster = `https://sabzlearn-project-backend.liara.run/courses/covers/${course.cover}`;
 
       const player = new Plyr("#player", {
         controls: [
@@ -207,12 +216,15 @@ function sessionContentGenerator(course) {
 
       document.title = `${data.session.title} - سبزلرن`;
       session_episode_name.innerHTML = data.session.title;
-      // creator_profile[index].src = 'http://localhost:4000/v1/courses/covers/'+ course.creator.profile;
-      video_download_btn.href = `http://localhost:4000/courses/covers/${data.session.video}`;
+      // creator_profile[index].src = 'https://sabzlearn-project-backend.liara.run/v1/courses/covers/'+ course.creator.profile;
+      video_download_btn.href = `https://sabzlearn-project-backend.liara.run/courses/covers/${data.session.video}`;
       course_episode_count_label.innerHTML = data.sessions.length;
-      course_status_label.innerHTML = !course.isComplete
-        ? "درحال برگزاری"
-        : "تمام شده";
+      course_status_label.innerHTML =
+        course.status == "start"
+          ? "درحال برگزاری"
+          : course.status == "presell"
+          ? "پیش فروش"
+          : "تمام شده";
     });
 
   session_episode_number.innerHTML = getQueryParams("epNum");
@@ -222,6 +234,7 @@ window.addEventListener("load", () => {
   if (!location.search) {
     location.href = "courses.html";
   }
+
   getCourseByName("cName").then((res) => {
     isUserRegisteredToThisCourse(res._id).then((res) => {
       if (res) {
@@ -371,13 +384,6 @@ function questionsGenerator(comments) {
           replyToComment(e.target.id);
         });
     });
-  } else {
-    commentsContainer.insertAdjacentHTML(
-      "afterbegin",
-      `
-  <span class="dont_have_comment">کامنتی برای این دوره وجود ندارد</span>
-  `
-    );
   }
 }
 
@@ -396,5 +402,28 @@ cancel_btn.addEventListener("click", () => {
 });
 
 getUserInfo().then((userInfo) => {
-  userNameLabel.innerHTML = userInfo.username;
+  if (userInfo) {
+    userNameLabel.innerHTML = userInfo.name;
+  } else {
+    userNameLabel.innerHTML = "کاربر";
+  }
 });
+
+function redirectUserToCoursePage(session) {
+  getAllCourses().then((courses) => {
+    let mainCourse = courses.find((course) => course._id == session.course);
+    // console.log(mainCourse);
+    if (!session.free) {
+      if (!isUserLogedIn()) {
+        location.href = `course.html?name=${mainCourse.shortName}`;
+      } else {
+        isUserRegisteredToThisCourse(mainCourse._id).then((res) => {
+          if (!res) {
+            location.href = `course.html?name=${mainCourse.shortName}`;
+          }
+        });
+      }
+    }
+  });
+  // console.log(session.free);
+}

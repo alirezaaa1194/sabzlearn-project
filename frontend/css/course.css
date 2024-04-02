@@ -32,6 +32,7 @@ main {
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  text-align: justify;
 }
 .course_offer_timer_box {
   width: 100%;
@@ -248,6 +249,7 @@ main {
   gap: 40px;
   font-size: 1.2rem;
   line-height: 40px;
+  text-align: justify;
   /* white-space: pre-line; */
 }
 .blog_desc strong {
@@ -275,6 +277,7 @@ main {
 }
 .blog_desc img {
   width: 100% !important;
+  height: unset;
   border-radius: 0.75rem;
 }
 
@@ -741,6 +744,11 @@ main {
   border-top-color: var(--SecondTextLightColor);
   animation: loaderRotate 1s infinite linear;
 }
+
+.course_cover_dont_start{
+  width: 100%;
+  border-radius: 1rem;
+}
 @keyframes loaderRotate {
   100% {
     transform: rotate(360deg);
@@ -792,21 +800,21 @@ main {
   }
   .course_price_box {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
   }
   .course_see_link {
     width: 100%;
     justify-content: center;
     order: 2;
-    padding: 13px 28px;
-    font-size: 24px;
+    padding: 7px 28px;
+    font-size: 21px;
   }
   .course_buy_link {
     width: 100%;
     justify-content: center;
     order: 2;
-    padding: 13px 28px;
-    font-size: 24px;
+    padding: 7px 28px;
+    font-size: 21px;
   }
   .course_price {
     width: 100%;

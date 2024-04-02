@@ -9,7 +9,7 @@ export function courseGenerator(container, courses, count, description) {
         <div class="Product-Card">
         <div class="Card-header">
           <a href="course.html?name=${course.shortName}">
-          <img src="http://localhost:4000/courses/covers/${
+          <img src="https://sabzlearn-project-backend.liara.run/courses/covers/${
             course.cover
           }" alt="">
           </a>
@@ -26,7 +26,7 @@ export function courseGenerator(container, courses, count, description) {
              course.categoryID
                ? `<a href="course_category.html?cat=${
                    course.categoryID.name
-                 }&catName=${course.categoryID.title.substring(12)}">${
+                 }&catName=${course.categoryID.title}">${
                    course.categoryID.title
                  }</a>`
                : ""
